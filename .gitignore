@@ -1,0 +1,24 @@
+## Ignore Visual Studio temporary files, build results, and
+## user-specific files
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code / VS settings
+.vs/
+.vscode/
+
+# SQL Server local DB
+*.mdf
+*.ldf
+
+# Others
+_ReSharper*/
+*.log
