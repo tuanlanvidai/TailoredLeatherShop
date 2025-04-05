@@ -1,0 +1,50 @@
+﻿@model List<ASPdotNET_CUOIMON.Models.ModelView.GroupedProductsView>
+
+@foreach (var group in Model)
+{
+    <div class="jewellery_section">
+        <div class="container">
+            <div class="jewellery_title">
+                <h1 class="fashion_taital" style="font-size: 26px;">
+                    <a href="@Url.Action("ByCategory", "Product", new { categoryId = group.CategoryId })">
+                        @group.CategoryName.ToUpper()
+                    </a>
+                </h1>
+            </div>
+            <div class="fashion_section_2">
+                <div class="row">
+                    @if (group.Products != null && group.Products.Count > 0)
+                    {
+                        foreach (var product in group.Products)
+                        {
+                            <div class="col-lg-4 col-sm-4 mb-4">
+                                <div class="box_main">
+                                    <h4 class="shirt_text">@product.Name</h4>
+                                    <div class="tshirt_img">
+                                        <img src="@Url.Content("~/Content/Client/" + product.ImageUrl)" alt="@product.Name" />
+                                    </div>
+                                    <div class="btn_main">
+                                        <div class="buy_bt">
+                                            <a href="@Url.Action("Details", "Product", new { id = product.ProductId })">Xem chi tiết</a>
+                                        </div>
+                                        <div class="seemore_bt">
+                                            <a href="@Url.Action("ByCategory", "Product", new { categoryId = group.CategoryId })">Xem thêm</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-12 text-center">
+                            <div class="alert alert-warning">
+                                Không có sản phẩm nào trong danh mục này.
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

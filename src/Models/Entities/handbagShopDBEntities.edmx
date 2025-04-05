@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="handbag_shop_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_categories">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="is_delete" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_order_details">
+          <Key>
+            <PropertyRef Name="order_detail_id" />
+          </Key>
+          <Property Name="order_detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_id" Type="int" />
+          <Property Name="product_id" Type="int" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="custom_note" Type="nvarchar" MaxLength="1000" />
+          <Property Name="is_delete" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_orders">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+          <Property Name="quote_price" Type="float" />
+          <Property Name="quote_note" Type="nvarchar" MaxLength="1000" />
+          <Property Name="deposit_amount" Type="float" />
+          <Property Name="estimated_delivery_date" Type="datetime" />
+          <Property Name="shipping_address" Type="nvarchar" MaxLength="255" />
+          <Property Name="additional_request" Type="nvarchar" MaxLength="255" />
+          <Property Name="admin_note" Type="nvarchar" MaxLength="1000" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="updated_at" Type="datetime" />
+          <Property Name="is_delete" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_product_images">
+          <Key>
+            <PropertyRef Name="image_id" />
+          </Key>
+          <Property Name="image_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="product_id" Type="int" Nullable="false" />
+          <Property Name="image_url" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="is_delete" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_products">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="category_id" Type="int" />
+          <Property Name="image_url" Type="nvarchar" MaxLength="255" />
+          <Property Name="is_available" Type="bit" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="is_delete" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_users">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password_hash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="role" Type="nvarchar" MaxLength="20" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="is_delete" Type="bit" />
+        </EntityType>
+        <Association Name="FK__tbl_order__order__534D60F1">
+          <End Role="tbl_orders" Type="Self.tbl_orders" Multiplicity="0..1" />
+          <End Role="tbl_order_details" Type="Self.tbl_order_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_orders">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="tbl_order_details">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_order__produ__5441852A">
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="0..1" />
+          <End Role="tbl_order_details" Type="Self.tbl_order_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="tbl_order_details">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_order__user___4AB81AF0">
+          <End Role="tbl_users" Type="Self.tbl_users" Multiplicity="0..1" />
+          <End Role="tbl_orders" Type="Self.tbl_orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="tbl_orders">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_produ__categ__440B1D61">
+          <End Role="tbl_categories" Type="Self.tbl_categories" Multiplicity="0..1" />
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_categories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="tbl_products">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_produ__produ__5AEE82B9">
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="1" />
+          <End Role="tbl_product_images" Type="Self.tbl_product_images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="tbl_product_images">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="handbag_shop_dbModelStoreContainer">
+          <EntitySet Name="tbl_categories" EntityType="Self.tbl_categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_order_details" EntityType="Self.tbl_order_details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_orders" EntityType="Self.tbl_orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_product_images" EntityType="Self.tbl_product_images" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_products" EntityType="Self.tbl_products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_users" EntityType="Self.tbl_users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__tbl_order__order__534D60F1" Association="Self.FK__tbl_order__order__534D60F1">
+            <End Role="tbl_orders" EntitySet="tbl_orders" />
+            <End Role="tbl_order_details" EntitySet="tbl_order_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_order__produ__5441852A" Association="Self.FK__tbl_order__produ__5441852A">
+            <End Role="tbl_products" EntitySet="tbl_products" />
+            <End Role="tbl_order_details" EntitySet="tbl_order_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_order__user___4AB81AF0" Association="Self.FK__tbl_order__user___4AB81AF0">
+            <End Role="tbl_users" EntitySet="tbl_users" />
+            <End Role="tbl_orders" EntitySet="tbl_orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_produ__categ__440B1D61" Association="Self.FK__tbl_produ__categ__440B1D61">
+            <End Role="tbl_categories" EntitySet="tbl_categories" />
+            <End Role="tbl_products" EntitySet="tbl_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_produ__produ__5AEE82B9" Association="Self.FK__tbl_produ__produ__5AEE82B9">
+            <End Role="tbl_products" EntitySet="tbl_products" />
+            <End Role="tbl_product_images" EntitySet="tbl_product_images" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="handbag_shop_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_categories">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_delete" Type="Boolean" />
+          <NavigationProperty Name="tbl_products" Relationship="Self.FK__tbl_produ__categ__440B1D61" FromRole="tbl_categories" ToRole="tbl_products" />
+        </EntityType>
+        <EntityType Name="tbl_order_details">
+          <Key>
+            <PropertyRef Name="order_detail_id" />
+          </Key>
+          <Property Name="order_detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_id" Type="Int32" />
+          <Property Name="product_id" Type="Int32" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="custom_note" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="is_delete" Type="Boolean" />
+          <NavigationProperty Name="tbl_orders" Relationship="Self.FK__tbl_order__order__534D60F1" FromRole="tbl_order_details" ToRole="tbl_orders" />
+          <NavigationProperty Name="tbl_products" Relationship="Self.FK__tbl_order__produ__5441852A" FromRole="tbl_order_details" ToRole="tbl_products" />
+        </EntityType>
+        <EntityType Name="tbl_orders">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="quote_price" Type="Double" />
+          <Property Name="quote_note" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="deposit_amount" Type="Double" />
+          <Property Name="estimated_delivery_date" Type="DateTime" Precision="3" />
+          <Property Name="shipping_address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="additional_request" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="admin_note" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="is_delete" Type="Boolean" />
+          <NavigationProperty Name="tbl_order_details" Relationship="Self.FK__tbl_order__order__534D60F1" FromRole="tbl_orders" ToRole="tbl_order_details" />
+          <NavigationProperty Name="tbl_users" Relationship="Self.FK__tbl_order__user___4AB81AF0" FromRole="tbl_orders" ToRole="tbl_users" />
+        </EntityType>
+        <EntityType Name="tbl_product_images">
+          <Key>
+            <PropertyRef Name="image_id" />
+          </Key>
+          <Property Name="image_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="product_id" Type="Int32" Nullable="false" />
+          <Property Name="image_url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_delete" Type="Boolean" />
+          <NavigationProperty Name="tbl_products" Relationship="Self.FK__tbl_produ__produ__5AEE82B9" FromRole="tbl_product_images" ToRole="tbl_products" />
+        </EntityType>
+        <EntityType Name="tbl_products">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="category_id" Type="Int32" />
+          <Property Name="image_url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="is_available" Type="Boolean" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="is_delete" Type="Boolean" />
+          <NavigationProperty Name="tbl_categories" Relationship="Self.FK__tbl_produ__categ__440B1D61" FromRole="tbl_products" ToRole="tbl_categories" />
+          <NavigationProperty Name="tbl_order_details" Relationship="Self.FK__tbl_order__produ__5441852A" FromRole="tbl_products" ToRole="tbl_order_details" />
+          <NavigationProperty Name="tbl_product_images" Relationship="Self.FK__tbl_produ__produ__5AEE82B9" FromRole="tbl_products" ToRole="tbl_product_images" />
+        </EntityType>
+        <EntityType Name="tbl_users">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="is_delete" Type="Boolean" />
+          <NavigationProperty Name="tbl_orders" Relationship="Self.FK__tbl_order__user___4AB81AF0" FromRole="tbl_users" ToRole="tbl_orders" />
+        </EntityType>
+        <Association Name="FK__tbl_produ__categ__440B1D61">
+          <End Role="tbl_categories" Type="Self.tbl_categories" Multiplicity="0..1" />
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_categories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="tbl_products">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_order__order__534D60F1">
+          <End Role="tbl_orders" Type="Self.tbl_orders" Multiplicity="0..1" />
+          <End Role="tbl_order_details" Type="Self.tbl_order_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_orders">
+              <PropertyRef Name="order_id" />
+            </Principal>
+            <Dependent Role="tbl_order_details">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_order__produ__5441852A">
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="0..1" />
+          <End Role="tbl_order_details" Type="Self.tbl_order_details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="tbl_order_details">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_order__user___4AB81AF0">
+          <End Role="tbl_users" Type="Self.tbl_users" Multiplicity="0..1" />
+          <End Role="tbl_orders" Type="Self.tbl_orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="tbl_orders">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_produ__produ__5AEE82B9">
+          <End Role="tbl_products" Type="Self.tbl_products" Multiplicity="1" />
+          <End Role="tbl_product_images" Type="Self.tbl_product_images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_products">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="tbl_product_images">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="handbagShopDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_categories" EntityType="Self.tbl_categories" />
+          <EntitySet Name="tbl_order_details" EntityType="Self.tbl_order_details" />
+          <EntitySet Name="tbl_orders" EntityType="Self.tbl_orders" />
+          <EntitySet Name="tbl_product_images" EntityType="Self.tbl_product_images" />
+          <EntitySet Name="tbl_products" EntityType="Self.tbl_products" />
+          <EntitySet Name="tbl_users" EntityType="Self.tbl_users" />
+          <AssociationSet Name="FK__tbl_produ__categ__440B1D61" Association="Self.FK__tbl_produ__categ__440B1D61">
+            <End Role="tbl_categories" EntitySet="tbl_categories" />
+            <End Role="tbl_products" EntitySet="tbl_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_order__order__534D60F1" Association="Self.FK__tbl_order__order__534D60F1">
+            <End Role="tbl_orders" EntitySet="tbl_orders" />
+            <End Role="tbl_order_details" EntitySet="tbl_order_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_order__produ__5441852A" Association="Self.FK__tbl_order__produ__5441852A">
+            <End Role="tbl_products" EntitySet="tbl_products" />
+            <End Role="tbl_order_details" EntitySet="tbl_order_details" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_order__user___4AB81AF0" Association="Self.FK__tbl_order__user___4AB81AF0">
+            <End Role="tbl_users" EntitySet="tbl_users" />
+            <End Role="tbl_orders" EntitySet="tbl_orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_produ__produ__5AEE82B9" Association="Self.FK__tbl_produ__produ__5AEE82B9">
+            <End Role="tbl_products" EntitySet="tbl_products" />
+            <End Role="tbl_product_images" EntitySet="tbl_product_images" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="handbag_shop_dbModelStoreContainer" CdmEntityContainer="handbagShopDBEntities">
+          <EntitySetMapping Name="tbl_categories">
+            <EntityTypeMapping TypeName="handbag_shop_dbModel.tbl_categories">
+              <MappingFragment StoreEntitySet="tbl_categories">
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_delete" ColumnName="is_delete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_order_details">
+            <EntityTypeMapping TypeName="handbag_shop_dbModel.tbl_order_details">
+              <MappingFragment StoreEntitySet="tbl_order_details">
+                <ScalarProperty Name="order_detail_id" ColumnName="order_detail_id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="custom_note" ColumnName="custom_note" />
+                <ScalarProperty Name="is_delete" ColumnName="is_delete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_orders">
+            <EntityTypeMapping TypeName="handbag_shop_dbModel.tbl_orders">
+              <MappingFragment StoreEntitySet="tbl_orders">
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="quote_price" ColumnName="quote_price" />
+                <ScalarProperty Name="quote_note" ColumnName="quote_note" />
+                <ScalarProperty Name="deposit_amount" ColumnName="deposit_amount" />
+                <ScalarProperty Name="estimated_delivery_date" ColumnName="estimated_delivery_date" />
+                <ScalarProperty Name="shipping_address" ColumnName="shipping_address" />
+                <ScalarProperty Name="additional_request" ColumnName="additional_request" />
+                <ScalarProperty Name="admin_note" ColumnName="admin_note" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="is_delete" ColumnName="is_delete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_product_images">
+            <EntityTypeMapping TypeName="handbag_shop_dbModel.tbl_product_images">
+              <MappingFragment StoreEntitySet="tbl_product_images">
+                <ScalarProperty Name="image_id" ColumnName="image_id" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="image_url" ColumnName="image_url" />
+                <ScalarProperty Name="is_delete" ColumnName="is_delete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_products">
+            <EntityTypeMapping TypeName="handbag_shop_dbModel.tbl_products">
+              <MappingFragment StoreEntitySet="tbl_products">
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="image_url" ColumnName="image_url" />
+                <ScalarProperty Name="is_available" ColumnName="is_available" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="is_delete" ColumnName="is_delete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_users">
+            <EntityTypeMapping TypeName="handbag_shop_dbModel.tbl_users">
+              <MappingFragment StoreEntitySet="tbl_users">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password_hash" ColumnName="password_hash" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="is_delete" ColumnName="is_delete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

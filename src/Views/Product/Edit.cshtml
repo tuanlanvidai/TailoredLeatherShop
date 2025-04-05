@@ -1,0 +1,87 @@
+﻿@model ASPdotNET_CUOIMON.Models.ModelView.ProductView
+@{
+    ViewBag.Title = "Chỉnh sửa sản phẩm";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<div class="fashion_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card shadow p-4 mb-5 bg-white rounded">
+                    <h3 class="text-center mb-4">Chỉnh sửa sản phẩm</h3>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger text-center">@ViewBag.Error</div>
+                    }
+
+                    @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.HiddenFor(m => m.ProductId)
+                        @Html.HiddenFor(m => m.ImageUrl)
+
+                        <div class="form-group mb-3">
+                            <label>Tên sản phẩm:</label>
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Mô tả:</label>
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Danh mục:</label>
+                            @Html.DropDownListFor(m => m.CategoryId,
+                                new SelectList(ViewBag.Categories, "CategoryId", "Name"),
+                                "-- Chọn danh mục --",
+                                new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Trạng thái:</label>
+                            @Html.CheckBoxFor(m => m.IsAvailable) Còn hàng
+                        </div>
+                        if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <div class="form-group mb-3">
+                                <label>Ảnh Thumbnail hiện tại:</label><br />
+                                <img src="@Url.Content("~/Content/Client/" + Model.ImageUrl)" alt="Thumbnail" width="100" />
+                            </div>
+                        }
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh Thumbnail mới:</label>
+                            <input type="file" name="thumbnail" class="form-control" />
+                        </div>
+                        if (Model.ImageGallery != null && Model.ImageGallery.Count > 0)
+                        {
+                            <div class="form-group mb-3">
+                                <label>Ảnh gallery hiện tại:</label><br />
+                                @foreach (var img in Model.ImageGallery)
+                                {
+                                    <img src="@Url.Content("~/Content/Client/" + img)" alt="Gallery" width="80" class="mr-2 mb-2" />
+                                }
+                            </div>
+                        }
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh 2:</label>
+                            <input type="file" name="image2" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh 3:</label>
+                            <input type="file" name="image3" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh 4:</label>
+                            <input type="file" name="image4" class="form-control" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Cập nhật sản phẩm</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

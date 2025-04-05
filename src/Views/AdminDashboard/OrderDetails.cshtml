@@ -1,0 +1,113 @@
+﻿@model ASPdotNET_CUOIMON.Models.ModelView.OrderView
+@{
+    ViewBag.Title = "Chi tiết đơn hàng (Admin)";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var user = ViewBag.UserProfile as ASPdotNET_CUOIMON.Models.ModelView.AccountSessionView;
+}
+
+<div class="fashion_section">
+    <div class="container">
+        <h1 class="fashion_taital">Chi tiết đơn hàng - Mã #@Model.OrderId</h1>
+        <div class="fashion_section_2">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="box_main p-4 shadow-sm">
+                        <h4 class="shirt_text mb-3">Thông tin người đặt hàng</h4>
+                        <p><strong>Họ và tên:</strong> @Model.CustomerName</p>
+                        <p><strong>Email:</strong> @Model.CustomerEmail</p>
+                        <p><strong>Số điện thoại:</strong> @Model.CustomerPhone</p>
+                        <hr />
+                        <h5 class="mt-3"><strong>Địa chỉ giao hàng:</strong></h5>
+                        <p>@Model.ShippingAddress</p>
+
+                        <h5 class="mt-3"><strong>Yêu cầu thêm:</strong></h5>
+                        <p>@Model.AdditionalRequest</p>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="box_main p-4 shadow-sm">
+                        <h4 class="shirt_text mb-3">Thông tin đơn hàng</h4>
+                        <p><strong>Trạng thái:</strong> @Model.Status</p>
+                        <p><strong>Giá báo:</strong> @(Model.QuotePrice > 0 ? $"{Model.QuotePrice:N0} VND" : "Chưa báo giá")</p>
+                        <p><strong>Ngày tạo:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+                        <p><strong>Ngày dự kiến giao hàng:</strong> @(Model.EstimatedDeliveryDate.HasValue ? Model.EstimatedDeliveryDate.Value.ToString("dd/MM/yyyy") : "Chưa cập nhật")</p>
+                        <hr />
+                        <h5 class="mt-3"><strong>Ghi chú của Admin:</strong></h5>
+                        <p>@(string.IsNullOrEmpty(Model.AdminNote) ? "Không có ghi chú" : Model.AdminNote)</p>
+                        <h5 class="mt-3"><strong>Danh sách sản phẩm</strong></h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="@Url.Content("~/Content/Client/" + item.ImageUrl)"
+                                                 alt="@item.ProductName"
+                                                 class="img-thumbnail me-2"
+                                                 style="width: 50px; height: 50px;" />
+                                            @item.ProductName
+                                        </td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.CustomNote</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @if (Model.Status == "New" || Model.Status == "Quoted")
+                        {
+                            using (Html.BeginForm("UpdateQuote", "AdminDashboard", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(m => m.OrderId)
+                                <div class="form-group mt-3">
+                                    <label><strong>Giá báo:</strong></label>
+                                    @Html.TextBoxFor(m => m.QuotePrice, new { @class = "form-control", type = "number", @placeholder = "Nhập giá báo (VND)", required = "required" })
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label><strong>Ghi chú của Admin:</strong></label>
+                                    @Html.TextAreaFor(m => m.AdminNote, new { @class = "form-control", rows = 3, @placeholder = "Nhập ghi chú từ Admin" })
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label><strong>Ngày dự kiến giao hàng:</strong></label>
+                                    @Html.TextBoxFor(m => m.EstimatedDeliveryDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", required = "required" })
+                                </div>
+
+                                <div class="mt-3 text-end">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fa fa-save"></i> Cập nhật đơn hàng
+                                    </button>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="mt-3 text-muted">
+                                <p><strong>Đơn hàng đã được xác nhận hoặc đã hủy. Không thể cập nhật.</strong></p>
+                            </div>
+                        }
+                        @if (Model.Status == "Quoted")
+                        {
+                            <div class="mt-3 text-end">
+                                @using (Html.BeginForm("CancelOrderByAdmin", "AdminDashboard", FormMethod.Post))
+                                {
+                                    @Html.Hidden("orderId", Model.OrderId)
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')">
+                                        <i class="fa fa-ban"></i> Hủy đơn hàng (Admin)
+                                    </button>
+                                }
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

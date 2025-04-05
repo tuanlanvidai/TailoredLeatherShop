@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b57ab551821b4605a838bf4e7a63b20b" Name="Diagram1">
+        <EntityTypeShape EntityType="handbag_shop_dbModel.tbl_categories" Width="1.5" PointX="0.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="handbag_shop_dbModel.tbl_order_details" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="handbag_shop_dbModel.tbl_orders" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="handbag_shop_dbModel.tbl_product_images" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="handbag_shop_dbModel.tbl_products" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="handbag_shop_dbModel.tbl_users" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <AssociationConnector Association="handbag_shop_dbModel.FK__tbl_produ__categ__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="handbag_shop_dbModel.FK__tbl_order__order__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="handbag_shop_dbModel.FK__tbl_order__produ__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="handbag_shop_dbModel.FK__tbl_order__user___4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="handbag_shop_dbModel.FK__tbl_produ__produ__5AEE82B9" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

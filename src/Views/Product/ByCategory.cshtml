@@ -1,0 +1,59 @@
+﻿@model List<ASPdotNET_CUOIMON.Models.ModelView.ProductView>
+
+@{
+    var categoryName = ViewBag.CategoryName as string;
+}
+
+<div class="jewellery_section">
+    <div class="container">
+        <div class="jewellery_title">
+            <h1 class="fashion_taital" style="font-size: 26px; text-transform: uppercase;">
+                DANH MỤC: @categoryName
+            </h1>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6 offset-md-3">
+                @using (Html.BeginForm("ByCategory", "Product", FormMethod.Get, new { @class = "input-group" }))
+                {
+                    <input type="hidden" name="categoryId" value="@ViewBag.CategoryId" />
+                    <input type="text" name="search" class="form-control" placeholder="Tìm kiếm sản phẩm..." value="@ViewBag.SearchTerm" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="fashion_section_2">
+            <div class="row">
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var product in Model)
+                    {
+                        <div class="col-lg-4 col-sm-4 mb-4">
+                            <div class="box_main">
+                                <h4 class="shirt_text">@product.Name</h4>
+                                <div class="tshirt_img">
+                                    <img src="@Url.Content("~/Content/Client/" + product.ImageUrl)" alt="@product.Name" />
+                                </div>
+                                <div class="btn_main">
+                                    <div class="buy_bt">
+                                        <a href="@Url.Action("Details", "Product", new { id = product.ProductId })">Xem chi tiết</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-center">
+                        <div class="alert alert-warning">
+                            Không có sản phẩm nào trong danh mục này.
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

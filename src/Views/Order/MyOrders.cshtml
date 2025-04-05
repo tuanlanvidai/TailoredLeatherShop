@@ -1,0 +1,84 @@
+﻿@model List<ASPdotNET_CUOIMON.Models.ModelView.OrderView>
+@{
+    ViewBag.Title = "Đơn hàng của tôi";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var user = ViewBag.UserProfile as ASPdotNET_CUOIMON.Models.ModelView.AccountSessionView;
+}
+
+<div class="fashion_section">
+    <div class="container">
+        <h1 class="fashion_taital">Đơn hàng của tôi</h1>
+        <div class="fashion_section_2">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="box_main p-4 shadow-sm">
+                        <h4 class="shirt_text mb-3">Thông tin của bạn</h4>
+                        <p><strong>Họ và tên:</strong> @user.FullName</p>
+                        <p><strong>Email:</strong> @user.Email</p>
+                        <p><strong>Số điện thoại:</strong> @user.Phone</p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="box_main p-4 shadow-sm">
+                        <h4 class="shirt_text mb-3">Danh sách đơn hàng</h4>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Trạng thái</th>
+                                        <th>Giá báo</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model)
+                                    {
+                                        <tr>
+                                            <td>@order.OrderId</td>
+                                            <td>@order.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                            <td>@order.Status</td>
+                                            <td>
+                                                @if (order.QuotePrice > 0)
+                                                {
+                                                    <span>@order.QuotePrice.ToString("N0") VND</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Đang chờ báo giá</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "Order", new { id = order.OrderId })"
+                                                   class="btn btn-warning btn-sm me-1" title="Xem chi tiết">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                @if (order.Status == "New" || order.Status == "Quoted")
+                                                {
+                                                    using (Html.BeginForm("CancelOrder", "Order", FormMethod.Post, new { @class = "d-inline-block" }))
+                                                    {
+                                                        @Html.Hidden("orderId", order.OrderId)
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')" title="Hủy đơn">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p class="text-center text-muted">Bạn chưa có đơn hàng nào.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

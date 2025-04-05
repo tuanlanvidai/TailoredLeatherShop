@@ -1,0 +1,42 @@
+﻿@model ASPdotNET_CUOIMON.Models.ModelView.AccountLoginView
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<div class="container mt-5" style="max-width: 450px;">
+    <div class="card shadow p-4">
+        <h3 class="text-center mb-4">Đăng nhập tài khoản</h3>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-signin" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            <div class="form-group mb-3">
+                <label for="Username">Tài khoản:</label>
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @placeholder = "Nhập tài khoản" })
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Password">Mật khẩu:</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Nhập mật khẩu" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100 fw-bold mb-3">Đăng nhập</button>
+        }
+
+        <div class="text-center">
+            <span>Bạn chưa có tài khoản?</span>
+            <a href="@Url.Action("Register", "Account")" class="btn btn-outline-primary btn-sm ms-2 mt-2">
+                Đăng ký ngay
+            </a>
+        </div>
+    </div>
+</div>

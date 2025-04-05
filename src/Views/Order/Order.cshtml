@@ -1,0 +1,72 @@
+﻿@model ASPdotNET_CUOIMON.Models.ModelView.OrderCreateView
+@{
+    ViewBag.Title = "Xác nhận đơn hàng";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+<div class="fashion_section">
+    <div class="container">
+        <h1 class="fashion_taital">Xác nhận thông tin đơn hàng</h1>
+        <div class="fashion_section_2">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="box_main p-4 shadow-sm">
+                        <h4 class="shirt_text mb-3">Thông tin giao hàng</h4>
+                        <div class="form-group mb-3">
+                            <label>Họ và tên:</label>
+                            <input type="text" class="form-control" value="@Model.FullName" readonly />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Số điện thoại:</label>
+                            <input type="text" class="form-control" value="@Model.Phone" readonly />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Email:</label>
+                            <input type="email" class="form-control" value="@Model.Email" readonly />
+                        </div>
+
+                        @using (Html.BeginForm("ConfirmOrder", "Order", FormMethod.Post, new { @class = "form-horizontal" }))
+                        {
+                            @Html.HiddenFor(m => m.ProductId)
+                            @Html.HiddenFor(m => m.Quantity)
+
+                            <div class="form-group mb-3">
+                                <label for="ShippingAddress" class="form-label">Địa chỉ giao hàng:</label>
+                                @Html.TextAreaFor(m => m.ShippingAddress, new { @class = "form-control", rows = "3", required = "required", placeholder = "Nhập địa chỉ giao hàng..." })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="AdditionalRequest" class="form-label">Yêu cầu thêm:</label>
+                                @Html.TextAreaFor(m => m.AdditionalRequest, new { @class = "form-control", rows = "2", placeholder = "Nhập yêu cầu thêm..." })
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 fw-bold mt-3" style="padding: 10px 20px;">
+                                Xác nhận đặt hàng
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="box_main">
+                        <h4 class="shirt_text">Thông tin sản phẩm</h4>
+                        <div class="d-flex align-items-start mb-3">
+                            <img src="@Url.Content("~/Content/Client/" + ViewBag.ProductImage)"
+                                 alt="@ViewBag.ProductName"
+                                 class="img-thumbnail me-3"
+                                 style="width: 120px; height: 120px;" />
+                            <div>
+                                <p class="mb-1 fw-bold" style="font-size: 18px;">@ViewBag.ProductName</p>
+                                <p class="mb-1 text-muted">Số lượng: <strong>@Model.Quantity</strong></p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Ghi chú:</strong> @Model.CustomNote</p>
+                            <p class="mb-1"><strong>Yêu cầu thêm:</strong> @Model.AdditionalRequest</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+﻿@model ASPdotNET_CUOIMON.Models.ModelView.ProductView
+@{
+    ViewBag.Title = "Thêm sản phẩm";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<div class="fashion_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card shadow p-4 mb-5 bg-white rounded">
+                    <h3 class="text-center mb-4">Thêm sản phẩm mới</h3>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger text-center">@ViewBag.Error</div>
+                    }
+
+                    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-group mb-3">
+                            <label>Tên sản phẩm:</label>
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Mô tả:</label>
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Danh mục:</label>
+                            <div class="input-group">
+                                @Html.DropDownListFor(m => m.CategoryId,
+                                    new SelectList(ViewBag.Categories, "CategoryId", "Name"),
+                                    "-- Chọn danh mục --",
+                                    new { @class = "form-control", required = "required", id = "ddlCategories" })
+                                <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addCategoryModal">
+                                    + Thêm danh mục
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Trạng thái:</label>
+                            @Html.CheckBoxFor(m => m.IsAvailable) Còn hàng
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh Thumbnail:</label>
+                            <input type="file" name="thumbnail" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh 2:</label>
+                            <input type="file" name="image2" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh 3:</label>
+                            <input type="file" name="image3" class="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Chọn ảnh 4:</label>
+                            <input type="file" name="image4" class="form-control" />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Thêm sản phẩm</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm danh mục -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Thêm danh mục mới</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addCategoryForm">
+                    <div class="form-group">
+                        <label for="newCategoryName">Tên danh mục</label>
+                        <input type="text" class="form-control" id="newCategoryName" required />
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="addCategory()">Thêm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function addCategory() {
+            var categoryName = $("#newCategoryName").val();
+            if (categoryName === "") {
+                alert("Vui lòng nhập tên danh mục.");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("AddCategory", "Category")',
+                type: 'POST',
+                data: { name: categoryName },
+                success: function (response) {
+                    if (response.success) {
+                        // Thêm danh mục mới vào dropdown
+                        $("#ddlCategories").append(new Option(response.name, response.id, true, true));
+                        $("#addCategoryModal").modal('hide');
+                        $("#newCategoryName").val("");
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra khi thêm danh mục.");
+                }
+            });
+        }
+    </script>
+}

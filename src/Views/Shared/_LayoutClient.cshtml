@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>@ViewBag.Title - LeatherCraft</title>
+    <meta name="description" content="LeatherCraft - Đặt túi xách và ví da thủ công theo yêu cầu. Chất liệu da thật cao cấp, thiết kế cá nhân hóa.">
+    <meta name="author" content="LeatherCraft">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Client/")css/bootstrap.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Client/")css/style.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="@Url.Content("~/Content/Client/")css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="@Url.Content("~/Content/Client/")images/fevicon.png" type="image/gif" />
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/Client/")css/jquery.mCustomScrollbar.min.css">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--  -->
+    <!-- owl stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="@Url.Content("~/Content/Client/")css/owl.carousel.min.css">
+    <link rel="stylesheet" href="@Url.Content("~/Content/Client/")css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    @using ASPdotNET_CUOIMON.Models.ModelView;
+    @{
+        var user = Session["user"] as AccountSessionView;
+    }
+    <!-- banner bg main start -->
+    <div class="banner_bg_main">
+        <!-- header top section start -->
+        <div class="container">
+            <div class="header_section_top">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="custom_menu">
+                            <ul>
+                                <li><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                                <li><a href="@Url.Action("Index", "Product")">Sản phẩm</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- header top section start -->
+        <!-- logo section start -->
+        <div class="logo_section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="logo"><a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Content/Client/")images/logo.png"></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- logo section end -->
+        <!-- header section start -->
+        <div class="header_section">
+            <div class="container">
+                <div class="containt_main">
+                    <div id="mySidenav" class="sidenav">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                        <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+                        <a href="@Url.Action("Index", "Product")">Sản phẩm</a>
+                        @if (user != null && user.Role == "Admin")
+                        {
+                            <a href="@Url.Action("Index", "AdminAccount")">Quản lý tài khoản</a>
+                        }
+
+                        @if (user == null)
+                        {
+                            <a href="@Url.Action("Login", "Account", new { returnUrl = Request.Url.PathAndQuery })">Đăng nhập</a>
+
+                            <a href="@Url.Action("Register", "Account")">Đăng ký</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Profile", "Account")">Thông tin tài khoản</a>
+
+
+                            if (user.Role == "Admin")
+                            {
+                                <a href="@Url.Action("Index", "AdminDashboard")">Quản lý sản phẩm</a>
+                                <a href="@Url.Action("Orders", "AdminDashboard")">Quản lý đơn hàng</a>
+                                <a href="@Url.Action("Index", "AdminAccount")">Quản lý tài khoản</a> <!-- Thêm link này -->
+                            }
+
+
+                            else if (user.Role == "Customer")
+                            {
+                                <a href="@Url.Action("MyOrders", "Order")">Đơn hàng của tôi</a>
+                            }
+
+                            <a href="@Url.Action("Logout", "Account")">Đăng xuất</a>
+                        }
+                    </div>
+
+
+                    <span class="toggle_icon" onclick="openNav()"><img src="@Url.Content("~/Content/Client/")images/toggle-icon.png"></span>
+                    @{
+                        var categories = ViewBag.Categories as List<ASPdotNET_CUOIMON.Models.ModelView.CategoryView>;
+                    }
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Danh mục
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @if (ViewBag.Categories != null)
+                            {
+                                foreach (var item in ViewBag.Categories)
+                                {
+                                    <a class="dropdown-item" href="@Url.Action("ByCategory", "Product", new { categoryId = item.CategoryId })">
+                                        @item.Name
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <span class="dropdown-item disabled">Không có danh mục</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="header_box">
+                        <div class="login_menu">
+                            <ul>
+                                @if (user == null)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Login", "Account")">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            <span class="padding_10">Đăng nhập</span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Profile", "Account")">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            <span class="padding_10">Thông tin tài khoản</span>
+                                        </a>
+                                    </li>
+
+
+                                    if (user.Role == "Admin")
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index", "AdminDashboard")">
+                                                <i class="fa fa-cogs"></i>
+                                                <span class="padding_10">Quản lý sản phẩm</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Orders", "AdminDashboard")">
+                                                <i class="fa fa-list-alt"></i>
+                                                <span class="padding_10">Quản lý đơn hàng</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Index", "AdminAccount")">
+                                                <i class="fa fa-users"></i>
+                                                <span class="padding_10">Quản lý tài khoản</span>
+                                            </a>
+                                        </li>
+                                    }
+
+
+                                    else if (user.Role == "Customer")
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("MyOrders", "Order")">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                <span class="padding_10">Đơn hàng</span>
+                                            </a>
+                                        </li>
+                                    }
+
+                                    <li>
+                                        <a href="@Url.Action("Logout", "Account")">
+                                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                            <span class="padding_10">Đăng xuất</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- header section end -->
+        <!-- banner section start -->
+        <div class="banner_section layout_padding">
+            <div class="container">
+                <div id="my_slider" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h1 class="banner_taital">TÚI XÁCH & VÍ DA<br>THỦ CÔNG THEO YÊU CẦU</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h1 class="banner_taital">DA THẬT CAO CẤP<br>THIẾT KẾ RIÊNG CHO BẠN</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h1 class="banner_taital">NGHỀ CHỌN NGƯỜI<br>CHỨ NGƯỜI CHỌN TIỀN</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#my_slider" role="button" data-slide="prev">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a class="carousel-control-next" href="#my_slider" role="button" data-slide="next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- banner section end -->
+    </div>
+    <!-- banner bg main end -->
+
+
+    <div class="container">@RenderBody()</div>
+
+
+    <!-- footer section start -->
+    <div class="footer_section layout_padding">
+        <div class="container">
+            <div class="footer_logo"><a href="@Url.Action("Index", "Home")"><img src="@Url.Content("~/Content/Client/")images/footer-logo.png"></a></div>
+            <div class="input_bt">
+                <input type="text" class="mail_bt" placeholder="Nhập email để nhận ưu đãi" name="Your Email">
+                <span class="subscribe_bt" id="basic-addon2"><a href="#">Subscribe</a></span>
+            </div>
+            <div class="footer_menu">
+                <ul>
+                    <li><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                    <li><a href="@Url.Action("Index", "Product")">Mẫu túi</a></li>
+                </ul>
+            </div>
+            <div class="location_main">
+                Liên hệ: <a href="#">0767 354 613</a> - Email: <a href="#">lantruongtuan333@gmail.com</a>
+            </div>
+        </div>
+    </div>
+    <!-- footer section end -->
+    <!-- copyright section start -->
+    <div class="copyright_section">
+        <div class="container">
+            <p class="copyright_text">© 2024 LeatherCraft. Copy và phát triển bởi anh Lân.</p>
+        </div>
+    </div>
+    <!-- copyright section end -->
+    <!-- Javascript files-->
+    <script src="@Url.Content("~/Content/Client/")js/jquery.min.js"></script>
+    <script src="@Url.Content("~/Content/Client/")js/popper.min.js"></script>
+    <script src="@Url.Content("~/Content/Client/")js/bootstrap.bundle.min.js"></script>
+    <script src="@Url.Content("~/Content/Client/")js/plugin.js"></script>
+    <!-- sidebar -->
+    <script src="@Url.Content("~/Content/Client/")js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="@Url.Content("~/Content/Client/")js/custom.js"></script>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

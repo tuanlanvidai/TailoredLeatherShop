@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ASPdotNET_CUOIMON.Models.ModelView.AccountView>
+@{
+    ViewBag.Title = "Quản lý tài khoản";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<div class="fashion_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow p-4 mb-5 bg-white rounded">
+                    <h2 class="text-center mb-4">Quản lý tài khoản</h2>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            @using (Html.BeginForm("Index", "AdminAccount", FormMethod.Get, new { @class = "form-inline" }))
+                            {
+                                <div class="input-group w-100">
+                                    @Html.TextBox("search", ViewBag.Search as string, new { @class = "form-control", @placeholder = "Tìm theo tên tài khoản..." })
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-search"></i> Tìm kiếm
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <a href="@Url.Action("CreateAdmin", "AdminAccount")" class="btn btn-success">
+                                <i class="fa fa-plus"></i> Thêm tài khoản Admin
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Họ và tên</th>
+                                    <th>Email</th>
+                                    <th>Điện thoại</th>
+                                    <th>Vai trò</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var stt = 1;
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@stt</td>
+                                        <td>@item.FullName</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.Phone</td>
+                                        <td>
+                                            @if (item.Role == "Admin")
+                                            {
+                                                <span class="badge badge-danger">Quản trị viên</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-info">Khách hàng</span>
+                                            }
+                                        </td>
+                                        <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            <a href="@Url.Action("Details", "AdminAccount", new { id = item.UserId })" class="btn btn-warning btn-sm">
+                                                <i class="fa fa-eye"></i> Xem chi tiết
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    stt++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

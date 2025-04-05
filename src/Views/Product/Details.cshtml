@@ -1,0 +1,126 @@
+﻿@model ASPdotNET_CUOIMON.Models.ModelView.ProductView
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+
+    var allImages = new List<string> { Model.ImageUrl };
+    if (Model.ImageGallery != null)
+    {
+        allImages.AddRange(Model.ImageGallery.Where(i => i != Model.ImageUrl));
+    }
+
+    var related = ViewBag.RelatedProducts as List<ASPdotNET_CUOIMON.Models.ModelView.ProductView>;
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 d-flex">
+            <div class="d-flex flex-column align-items-start me-3">
+                @foreach (var img in allImages)
+                {
+                    <img src="@Url.Content("~/Content/Client/" + img)"
+                         class="img-thumbnail mb-2"
+                         style="width: 80px; height: 80px; cursor: pointer;"
+                         onclick="changeMainImage('@Url.Content("~/Content/Client/" + img)')" />
+                }
+            </div>
+            <div class="flex-grow-1 text-center">
+                <img id="mainImage" src="@Url.Content("~/Content/Client/" + Model.ImageUrl)"
+                     class="img-fluid border" style="max-height: 450px;" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h1 class="fw-bold" style="font-size: 28px; margin-bottom: 10px;">@Model.Name</h1>
+            <p class="text-muted fst-italic mb-3" style="font-size: 16px;">Danh mục: @Model.CategoryName</p>
+            <p style="font-size: 15px; color: #555;">@Model.Description</p>
+
+            @if (Session["user"] == null)
+            {
+                <a href="@Url.Action("Login", "Account", new { returnUrl = Request.Url.PathAndQuery })"
+                   class="btn mt-3"
+                   style="background-color: #ffc107; color: black; font-weight: bold; padding: 10px 20px; border-radius: 4px;">
+                    Đặt hàng ngay
+                </a>
+            }
+            else
+            {
+                <form method="get" action="@Url.Action("Order", "Order")">
+                    <input type="hidden" name="productId" value="@Model.ProductId" />
+                    <div class="form-group mt-4">
+                        <label for="Quantity" style="font-weight: 500;">Số lượng:</label>
+                        <input type="number" name="quantity" id="Quantity" value="1" min="1"
+                               class="form-control w-25" style="display: inline-block;" />
+                    </div>
+                    <button type="submit"
+                            class="btn mt-3"
+                            style="background-color: #ffc107; color: black; font-weight: bold; padding: 10px 20px; border-radius: 4px;">
+                        Đặt hàng ngay
+                    </button>
+                </form>
+            }
+
+
+        </div>
+    </div>
+
+    @if (related != null && related.Count > 0)
+    {
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="fw-bold mb-4 text-center" style="font-size: 24px;">Sản phẩm liên quan</h3>
+
+                <div id="relatedCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        @{
+                            int itemsPerSlide = 3;
+                            int total = related.Count;
+                            int slideCount = (int)Math.Ceiling((double)total / itemsPerSlide);
+
+                            for (int i = 0; i < slideCount; i++)
+                            {
+                                var group = related.Skip(i * itemsPerSlide).Take(itemsPerSlide).ToList();
+                                <div class="carousel-item @(i == 0 ? "active" : "")">
+                                    <div class="row justify-content-center">
+                                        @foreach (var product in group)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="card mb-3 h-100 shadow-sm">
+                                                    <img src="@Url.Content("~/Content/Client/" + product.ImageUrl)"
+                                                         class="card-img-top" alt="@product.Name">
+                                                    <div class="card-body text-center">
+                                                        <h5 class="card-title" style="font-size: 16px; font-weight: 500;">@product.Name</h5>
+                                                        <a href="@Url.Action("Details", "Product", new { id = product.ProductId })"
+                                                           class="btn btn-outline-primary btn-sm mt-2">
+                                                            Xem chi tiết
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <a class="carousel-control-prev" href="#relatedCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Trước</span>
+                    </a>
+                    <a class="carousel-control-next" href="#relatedCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Tiếp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function changeMainImage(src) {
+            document.getElementById("mainImage").src = src;
+        }
+    </script>
+}

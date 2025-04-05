@@ -1,0 +1,58 @@
+﻿@model ASPdotNET_CUOIMON.Models.ModelView.AccountRegisterView
+@{
+    ViewBag.Title = "Đăng ký";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <div class="card shadow p-4">
+        <h3 class="text-center mb-4">Tạo tài khoản mới</h3>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success text-center">@TempData["Success"]</div>
+        }
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+            <div class="form-group mb-3">
+                <label for="Username">Tài khoản:</label>
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @placeholder = "Nhập tài khoản" })
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Password">Mật khẩu:</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Nhập mật khẩu" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Email">Email:</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Nhập email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="FullName">Họ và tên:</label>
+                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @placeholder = "Nhập họ tên" })
+                @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Phone">Số điện thoại:</label>
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @placeholder = "Nhập số điện thoại" })
+                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 fw-bold mb-3">Đăng ký</button>
+        }
+
+        <div class="text-center">
+            <span>Đã có tài khoản?</span>
+            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-secondary btn-sm ms-2 mt-2">
+                Đăng nhập
+            </a>
+        </div>
+    </div>
+</div>
