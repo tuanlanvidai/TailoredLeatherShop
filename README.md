@@ -40,8 +40,6 @@
 
 ## 🖼 Screenshots & Pages Overview
 
-> 💡 You can upload screenshots to the `screenshots/` folder and update the image paths below.
-
 ### 🏠 Home Page
 
 Displays featured leather products grouped by category. Open for all visitors.
